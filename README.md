@@ -6,7 +6,7 @@ Following the recent savage attacks in Paris, the world has seen the chaos that 
 
 ### Ideas
 - Use machine learning to identify keywords and highlight specific paragraphs
-    - Wit.AI, Google Cloud Platform (Compute Engine, Prediction API, etc.) 
+    - Wit.AI, Indico, Google Cloud Platform (Compute Engine, Prediction API, etc.) 
     - Naive Bayes filters
 - Get latest events through Twitter trends and maybe other sources?
 - Some sort of safety feature for people using it? Live maps? etc. Aggregate user inputed information on important things.

@@ -16,6 +16,7 @@ Following the recent savage attacks in Paris, the world has seen the chaos that 
 - Web App can be built off of Angular, Meteor, etc.
 - Beautiful design! Bootstrap! Semantic UI!
 - Mobile android app if possible? Watch Apps? 
+- Python News Scraper (or other language equivelant?) https://github.com/codelucas/newspaper
 - Very fast backend to periodically scan the web for new things. Possibly written in Python, Ruby (broken on Windows), Node.JS, or PHP. C++ might be too difficult. Are there event hooks for news aggregates? 
 
 ### Proposed Algorithmic Steps:

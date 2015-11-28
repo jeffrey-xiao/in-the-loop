@@ -91,6 +91,9 @@ loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routePar
     for(var i = 0; i < 4; i++){
       $scope.chart[i] = Math.round($scope.chart[i] / sum * 100);
     }
+    if(!$scope.article.locations){
+      $scope.article.locations = [];
+    }
     for(var i = 0; i < $scope.article.locations.length; i++){
       locs.push({lat:$scope.article.locations[i].lat, lon:$scope.article.locations[i].lon});
     }

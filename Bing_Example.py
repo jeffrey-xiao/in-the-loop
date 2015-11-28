@@ -375,14 +375,14 @@ for location in results:
                     imageI+=1
                     print imgContent[imageI]
                     data['data'].append({
-                        'content': imgContent[imageI].src,
+                        'content': imgContent[imageI]['src'],
                         'type': 'image',
-                        'date': imgContent[imageI].date,
+                        'date': imgContent[imageI]['date'],
                         'source': {
                             'name': 'Source',
-                            'url': imgContent[imageI].source
+                            'url': imgContent[imageI]['source']
                         },
-                        'caption': imgContent[imageI].caption
+                        'caption': imgContent[imageI]['caption']
                     })
 
                 print "date",tags[i][2]

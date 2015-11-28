@@ -224,7 +224,10 @@ $(function(){
   $('body').on('click', '.fullImage', function(){
     $(this).toggleClass('full');
     if($(this).hasClass('full')){
-      $('#article-zoom-bg').show().addClass('show');
+      $('#article-zoom-bg').show();
+      setTimeout(function(){
+        $('#article-zoom-bg').addClass('show');
+      },1);
       var scrollTop = $(window).scrollTop();
       var maxScale = Math.min(($(window).width()-30)/$(this).width(), ($(window).height()-30 - $('#navbar').outerHeight())/$(this).height());
       var centerY = $(this).offset().top - scrollTop + $(this).outerHeight()/2;

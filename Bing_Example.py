@@ -3,8 +3,10 @@ import json
 import Queue
 from twitter import *
 
+'''
+Aho-corasick algorithm -- unused
+'''
 filein = open("words.txt", "r")
-
 class Node:
     def __init__ (self, depth, index):
         self.depth = depth
@@ -77,6 +79,10 @@ def init ():
         root.addWord(word.lower().strip())
     computeFall()
 
+'''
+Initializing bing search api
+'''
+
 keyBing = 'w9Wv9QcXG2TrFgSdVdXNlcdDioOzGBmlNFhlu4994qk'
 credentialBing = 'Basic ' + (':%s' % keyBing).encode('base64')[:-1] # the "-1" is to remove the trailing "\n" which encode adds
 top = 10
@@ -91,6 +97,10 @@ def searchKeyword (keyword):
     response = requestOpener.open(request) 
     
     return json.load(response)['d']['results']
+
+'''
+Initializing twitter
+'''
 
 config = {}
 execfile("config.py", config)

@@ -152,7 +152,7 @@ Main program
 #for location in results:
 #    for trend in location["trends"]:
         #keyword = trend["name"]
-keyword = "Paris Attacks"
+keyword = "terrorist"
 allKeyWords = []
 allKeyWordsCounts = []
 allParagraphs = []
@@ -202,22 +202,41 @@ if keyword != None:
                 adjKP[j][pairs[i][1]] = False
     res = getMatching(len(allParagraphs), len(allKeyWords), adjKP)
     print res
+    description = allParagraphs[res[0]].encode('utf-8').strip()
+    if len(res) == 0:
+        description = "No relevant articles found."
     data = {
-        'description': allParagraphs[res[0]].encode('utf-8').strip(),
+        'description': description,
         'header' : tags[res[0]][0],
         'tag': keyword,
         'image': 'http://lorempixel.com/1280/720/sporpyts/4/',
         'data' : []
     }
+    political_sum = [0]*4
+    mood_avg = 0
     for i in res:
+        political_sentiment = indicoio.political(allParagraphs[i].encode('utf-8').strip())
+        mood = indicoio.sentiment(allParagraphs[i].encode('utf-8').strip())
         data['data'].append({
             'content':  allParagraphs[i].encode('utf-8').strip(),
             'type': 'paragraph',
+            'political-sentiment' : political_sentiment,
+            'mood' : mood,
             'source': {
                 'name': 'Source',
                 'url': tags[i][1]
             }
         })
+        cnt = 0;
+        # 0 : libertarian; 1 : green; 2 : liberal; 3 : conservative
+        for j in political_sentiment:
+            political_sum[cnt] += political_sentiment[j]
+            cnt+=1
+        mood_avg += mood
+    if len(res) > 0:
+        mood_avg /= len(res)
+    data['political-sum'] = political_sum
+    data['mood-avg'] = mood_avg 
     result = firebase.post('/', data)
 
 '''

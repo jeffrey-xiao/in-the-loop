@@ -43,7 +43,7 @@ loopApp.controller('HomeController', ['$scope', '$firebaseArray', function($scop
       }
     }
     for(var i = 0; i < total; i++){
-      $('<img src="'+$scope.articles[i].image+'" />').load(function(){
+      $('<img src="img/uploads/'+$scope.articles[i].image+'" />').load(function(){
         loaded++;
         if(loaded == total){ done(); }
       });

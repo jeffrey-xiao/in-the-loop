@@ -373,14 +373,14 @@ for location in results:
                 })
                 if imageI < len(imgContent):
                     data['data'].append({
-                        'content': imgContent[i].url,
+                        'content': imgContent[imageI].src,
                         'type': 'image',
-                        'date': imgContent[i].date,
+                        'date': imgContent[imageI].date,
                         'source': {
                             'name': 'Source',
-                            'url': imgContent[i].source
+                            'url': imgContent[imageI].source
                         },
-                        'caption': imgContent[i].caption
+                        'caption': imgContent[imageI].caption
                     })
                     imageI+=1
 

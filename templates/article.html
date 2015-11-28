@@ -9,6 +9,7 @@
         <div ng-repeat="data in article.data" class="article-block">
           <img ng-if="data.type=='image'" src="{{data.content}}" />
           <p ng-if="data.type=='paragraph'">{{data.content}}</p>
+          <div ng-if="data.type=='map'" class="map-embed"></div>
           <p class="source"><a href="{{data.source.url}}">Source: {{data.source.name}}</a></p>
         </div>
       </div>

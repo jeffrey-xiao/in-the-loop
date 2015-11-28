@@ -1,5 +1,6 @@
 var loopApp = angular.module('loopApp', ["firebase", 'ngRoute']);
 var stop = false;
+mapLoaded = false;
 loopApp.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
   when('/', {
@@ -14,7 +15,9 @@ loopApp.config(['$routeProvider', function($routeProvider) {
     redirectTo: '/'
   });
 }]);
-
+function initMap(){
+  mapLoaded = true;
+}
 loopApp.controller('HomeController', ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
   var ref = new Firebase("https://in-the-loop.firebaseio.com/");
   $scope.articles = $firebaseArray(ref);
@@ -46,8 +49,56 @@ loopApp.controller('HomeController', ['$scope', '$firebaseArray', function($scop
 loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routeParams', function($scope, $firebaseObject, $routeParams) {
   $('#loader').addClass('done').delay(500).hide(1);
   stop = true;
+  var locs = [];
+  function queueLocs(){
+    if(mapLoaded){
+      for(var i = 0; i < locs.length; i++){
+        var map =  new google.maps.Map($('.map-embed')[i], {
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        var bounds = new google.maps.LatLngBounds();
+        var infowindow = new google.maps.InfoWindow();
+
+        for (var j = 0; j < locs[i].length; j++) {
+          var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(locs[i][j].lat, locs[i][j].lon),
+            map: map
+          });
+
+          //extend the bounds to include each marker's position
+          bounds.extend(marker.position);
+
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+              infowindow.setContent(locs[i][j].description);
+              infowindow.open(map, marker);
+            }
+          })(marker, i));
+        }
+
+        //now fit the map to the newly inclusive bounds
+        map.fitBounds(bounds);
+
+        //(optional) restore the zoom level after the map is done scaling
+        var listener = google.maps.event.addListener(map, "idle", function () {
+          map.setZoom(3);
+          google.maps.event.removeListener(listener);
+        });
+      }
+    }else{
+      setTimeout(queueLocs, 500);
+    }
+  }
   var ref = new Firebase("https://in-the-loop.firebaseio.com/"+$routeParams.id);
   $scope.article = $firebaseObject(ref);
+  $scope.article.$loaded().then(function(){
+    for(var i = 0; i < $scope.article.data.length; i++){
+      if($scope.article.data[i].type == 'map'){
+        locs.push($scope.article.data[i].content);
+      }
+    }
+    setTimeout(queueLocs, 1);
+  });
 }]);
 
 

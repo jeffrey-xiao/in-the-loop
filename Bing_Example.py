@@ -232,7 +232,7 @@ for location in results:
 
 
                 def get_images(URL):
-                    default_dir = "LillianImages"
+                    default_dir = "/usr/share/nginx/html/img/uploads"
                     opener = urllib2.build_opener()
                     urllib2.install_opener(opener)
                     soup = BeautifulSoup(urllib2.urlopen(URL).read())

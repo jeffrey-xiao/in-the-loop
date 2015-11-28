@@ -61,9 +61,9 @@ loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routePar
   setTimeout(function(){
     new WOW().init();
   },1);
-  $scope.labels = ['libertarian', 'green', 'liberal', 'conservative'];
+  $scope.labels = ['libertarian', 'liberal', 'green', 'conservative'];
   $scope.chart = [0,0,0,0];
-  $scope.chartColours = ["#FF7300","#15CF21","#DE2121","#1966D1"];
+  $scope.chartColours = ["#FF7300","#DE2121","#15CF21","#1966D1"];
   var locs = [];
   function queueLocs(){
     if(mapLoaded){

@@ -221,7 +221,7 @@ $(function(){
   $('body').on('click', '.fullImage', function(){
     $(this).toggleClass('full');
     if($(this).hasClass('full')){
-      var maxScale = Math.min(($(window).width()-30)/$(this).width(), ($(window).height()-30)/$(this).height());
+      var maxScale = Math.min(($(window).width()-30)/$(this).width(), ($(window).height()-30 - $('#navbar').outerHeight())/$(this).height());
       var centerY = $(this).offset().top + $(this).outerHeight()/2;
       var centerX = $(this).offset().left + $(this).outerWidth()/2;
       var halfWidth = $(this).outerWidth()/2*maxScale;
@@ -229,7 +229,7 @@ $(function(){
       var top = centerY - halfHeight;
       var left = centerX - halfWidth;
       console.log('scale('+maxScale+'), translate('+(15-left)+'px,'+(15-top)+'px)');
-      $(this).css('transform', 'scale('+maxScale+'), translate('+(15-left)+'px,'+(15-top)+'px)');
+      $(this).css('transform', 'scale('+maxScale+') translate('+(15-left)+'px,'+(15-top+$('#navbar').outerHeight())+'px)');
     }else{
       $(this).css('transform', '');
     }

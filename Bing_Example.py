@@ -354,7 +354,7 @@ for location in results:
                 except:
                     print "Cannot parse location"
 
-            political_sum = [0]*4
+            political_sum = {}
             mood_avg = 0
             imageI = 0
             for i in res:
@@ -371,6 +371,7 @@ for location in results:
                         'url': tags[i][1]
                     }
                 })
+                print imgContent
                 if imageI < len(imgContent):
                     data['data'].append({
                         'content': imgContent[imageI].src,

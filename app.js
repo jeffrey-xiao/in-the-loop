@@ -225,8 +225,8 @@ $(function(){
       var maxScale = Math.min(($(window).width()-30)/$(this).width(), ($(window).height()-30 - $('#navbar').outerHeight())/$(this).height());
       var centerY = $(this).offset().top - scrollTop + $(this).outerHeight()/2;
       console.log(centerY);
-      var centerX = $(this).offset().left + $(this).outerWidth()/2;/*scale('+maxScale+') */
-      $(this).css('transform', 'translate('+($(window).width()/2-centerX)+'px,'+($(window).height()/2-centerY+$('#navbar').outerHeight())+'px)');
+      var centerX = $(this).offset().left + $(this).outerWidth()/2;
+      $(this).css('transform', 'scale('+maxScale+') translate('+($(window).width()/2-centerX)+'px,'+($(window).height()/2-centerY+$('#navbar').outerHeight())+'px)');
     }else{
       $(this).css('transform', '');
     }

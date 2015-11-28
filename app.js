@@ -1,4 +1,4 @@
-var loopApp = angular.module('loopApp', ["firebase", 'ngRoute']);
+var loopApp = angular.module('loopApp', ["firebase", 'ngRoute', 'chart.js']);
 var stop = false;
 mapLoaded = false;
 loopApp.config(['$routeProvider', function($routeProvider) {
@@ -55,42 +55,22 @@ loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routePar
   setTimeout(function(){
     new WOW().init();
   },1);
-  $('#loader').addClass('done').delay(500).hide(1);
-  stop = true;
+  $scope.labels = ['libertarian', 'green', 'liberal', 'conservative'];
+  $scope.chart = [0,0,0,0];
+  $scope.chartColours = ["#FF7300","#15CF21","#DE2121","#1966D1"];
   var locs = [];
   function queueLocs(){
     if(mapLoaded){
       for(var i = 0; i < locs.length; i++){
-        var map =  new google.maps.Map($('.map-embed')[i], {
+        var map = new google.maps.Map($('.map-embed')[i], {
+          zoom: 4,
+          center: {lat:locs[i].lat, lng: locs[i].lon},
           mapTypeId: google.maps.MapTypeId.ROADMAP
         });
-        var bounds = new google.maps.LatLngBounds();
-        var infowindow = new google.maps.InfoWindow();
 
-        for (var j = 0; j < locs[i].length; j++) {
-          var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(locs[i][j].lat, locs[i][j].lon),
-            map: map
-          });
-
-          //extend the bounds to include each marker's position
-          bounds.extend(marker.position);
-
-          google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-              infowindow.setContent(locs[i][j].description);
-              infowindow.open(map, marker);
-            }
-          })(marker, i));
-        }
-
-        //now fit the map to the newly inclusive bounds
-        map.fitBounds(bounds);
-
-        //(optional) restore the zoom level after the map is done scaling
-        var listener = google.maps.event.addListener(map, "idle", function () {
-          map.setZoom(3);
-          google.maps.event.removeListener(listener);
+        var marker = new google.maps.Marker({
+          position: {lat:locs[i].lat, lng: locs[i].lon},
+          map: map
         });
       }
     }else{
@@ -100,11 +80,16 @@ loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routePar
   var ref = new Firebase("https://in-the-loop.firebaseio.com/"+$routeParams.id);
   $scope.article = $firebaseObject(ref);
   $scope.article.$loaded().then(function(){
-    for(var i = 0; i < $scope.article.data.length; i++){
-      if($scope.article.data[i].type == 'map'){
-        locs.push($scope.article.data[i].content);
-      }
+    $scope.chart = $scope.article['political-sum'];
+    sum = $scope.chart[0] + $scope.chart[1] + $scope.chart[2] + $scope.chart[3];
+    for(var i = 0; i < 4; i++){
+      $scope.chart[i] = Math.round($scope.chart[i] / sum * 100);
     }
+    for(var i = 0; i < $scope.article.locations.length; i++){
+      locs.push({lat:$scope.article.locations[i].lat, lon:$scope.article.locations[i].lon});
+    }
+    $('#loader').addClass('done').delay(500).hide(1);
+    stop = true;
     setTimeout(queueLocs, 1);
   });
 }]);

@@ -1,16 +1,26 @@
 <div id="article-wrapper">
   <div class="container">
     <div class="row">
-      <div class="col-sm-5 col-md-4 col-lg-3" id="article-overview">
+      <div class="col-sm-3" id="article-overview">
         <img src="{{article.image}}" />
         <h1>#{{article.tag}}<br/><span class="tag">{{article.header}}</span></h1>
       </div>
-      <div class="col-sm-7 col-md-8 col-lg-9" id="article-content">
+      <div class="col-sm-6" id="article-content">
         <div ng-repeat="data in article.data" class="article-block wow fadeInUp" data-wow-duration="450ms">
           <img ng-if="data.type=='image'" src="{{data.content}}" />
           <p ng-if="data.type=='paragraph'">{{data.content}}</p>
-          <div ng-if="data.type=='map'" class="map-embed"></div>
           <p class="source"><a href="{{data.source.url}}">Source: {{data.source.name}}</a></p>
+        </div>
+      </div>
+      <div class="col-sm-3" id="article-cards">
+        <div class="article-card">
+          <h3>Aggregate Political Views</h3>
+          <canvas class="chart chart-pie" chart-data="chart" chart-labels="labels" chart-colours="chartColours"></canvas>
+        </div>
+        <div class="article-card" ng-repeat="location in article.locations">
+          <h3>{{location.name}}</h3>
+          <div class="map-embed"></div>
+          <p ng-repeat="desc in location.description track by $index | limitTo:2">{{desc}}</p>
         </div>
       </div>
     </div>

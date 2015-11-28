@@ -131,14 +131,14 @@ def searchKeyword (keyword, top, offset):
 '''
 Initializing twitter
 '''
-'''
+
 config = {}
 execfile("config.py", config)
 
 twitter = Twitter(auth = OAuth(config["access_key"], config["access_secret"], config["consumer_key"], config["consumer_secret"]))
 
 results = twitter.trends.place(_id = 23424775)
-'''
+
 '''
 Initializing firebase
 '''
@@ -173,12 +173,19 @@ for location in results:
             # process keyword
             print "Results for " + keyword
             results = searchKeyword(keyword.replace(" ","+"), 15, 0)
-            results += searchKeyword(keyword.replace(" ","+"), 15, 16)
+            if len(results) == 15:
+                results += searchKeyword(keyword.replace(" ","+"), 15, 16)
             for x in range(len(results)):
                 print results[x]["Url"]
                 article = Article(results[x]["Url"])
                 article.download()
-                article.parse()
+                try:
+                    article.parse()
+                except:
+                    print "Could not parse HTML file"
+                    continue
+                if article.text.strip() == '':
+                    continue
                 entities = indicoio.named_entities(article.text)
                 for key, value in entities.iteritems():
                     if value['categories']['location'] > 0.7:
@@ -231,28 +238,37 @@ for location in results:
                 'locations' : []
             }
             print places
+            kk = 0
             for search in places:
-                query_result = google_places.nearby_search(
-                        location=search)
-                for place in query_result.places:
-
-                    place.get_details()
-                    if 'neighborhood' in place.details['types'] or 'locality' in place.details['types']:
-                        wolfRes = wolframClient.query(search)
-                        photos = None
-                        if 'photos' in place.details:
-                            photos = place.details['photos']
-                        loc = {
-                            'name': place.details['formatted_address'],
-                            'photo': photos,
-                            'description': [],
-                            'lat': place.details['geometry']['location']['lat'],
-                            'lon': place.details['geometry']['location']['lng']
-                        }
-                        for pod in wolfRes.pods:
-                            loc['description'].append(pod.main.text)
-                        data['locations'].append(loc)
+                kk+=1
+                if kk > 4:
                     break
+                print ":"
+                print search
+                print ":"
+                try:
+                    query_result = google_places.nearby_search(location=search)
+                    for place in query_result.places:
+
+                        place.get_details()
+                        if 'neighborhood' in place.details['types'] or 'locality' in place.details['types']:
+                            wolfRes = wolframClient.query(search)
+                            photos = None
+                            if 'photos' in place.details:
+                                photos = place.details['photos']
+                            loc = {
+                                'name': place.details['formatted_address'],
+                                'photo': photos,
+                                'description': [],
+                                'lat': place.details['geometry']['location']['lat'],
+                                'lon': place.details['geometry']['location']['lng']
+                            }
+                            for pod in wolfRes.pods:
+                                loc['description'].append(pod.main.text)
+                            data['locations'].append(loc)
+                        break
+                except:
+                    print "Cannot parse location"
 
             political_sum = [0]*4
             mood_avg = 0
@@ -272,7 +288,7 @@ for location in results:
                 })
                 print "date",tags[i][2]
                 cnt = 0;
-                # 0 : libertarian; 1 : green; 2 : liberal; 3 : conservative
+                # 0 : libertarian; 1 : liberal; 2 : green; 3 : conservative
                 for j in political_sentiment:
                     political_sum[cnt] += political_sentiment[j]
                     cnt+=1

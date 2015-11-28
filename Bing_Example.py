@@ -371,8 +371,9 @@ for location in results:
                         'url': tags[i][1]
                     }
                 })
-                print imgContent
                 if imageI < len(imgContent):
+                    imageI+=1
+                    print imgContent[imageI]
                     data['data'].append({
                         'content': imgContent[imageI].src,
                         'type': 'image',
@@ -383,7 +384,6 @@ for location in results:
                         },
                         'caption': imgContent[imageI].caption
                     })
-                    imageI+=1
 
                 print "date",tags[i][2]
                 # 0 : libertarian; 1 : liberal; 2 : green; 3 : conservative

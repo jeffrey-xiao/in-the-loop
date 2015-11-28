@@ -321,6 +321,8 @@ for location in results:
                 'data' : [],
                 'locations' : []
             }
+            if len(imageContent) > 0:
+                data['image'] = imageContent[0]['image']
             print places
             kk = 0
             for search in places:
@@ -379,7 +381,7 @@ for location in results:
                 if imageI < len(imgContent):
                     imageI+=1
                     data['data'].append({
-                        'content': imgContent[imageI]['src'],
+                        'content': imgContent[imageI]['image'],
                         'type': 'image',
                         'date': imgContent[imageI]['date'],
                         'source': {

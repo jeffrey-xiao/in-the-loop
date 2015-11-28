@@ -38,10 +38,8 @@ loopApp.controller('HomeController', ['$scope', '$firebaseArray', function($scop
     function done(){
       if(!complete){
         complete = true;
-        $('#loader').addClass('done').delay(500).hide(1);
-        setTimeout(function(){
-          stop = true;
-        },500);
+        $('#loader').hide();
+        stop = true;
       }
     }
     for(var i = 0; i < total; i++){
@@ -61,7 +59,7 @@ loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routePar
   setTimeout(function(){
     new WOW().init();
   },1);
-  $scope.labels = ['libertarian', 'liberal', 'green', 'conservative'];
+  $scope.labels = ['Libertarian', 'Liberal', 'Green', 'Conservative'];
   $scope.chart = [0,0,0,0];
   $scope.chartColours = ["#FF7300","#DE2121","#15CF21","#1966D1"];
   var locs = [];
@@ -87,11 +85,11 @@ loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routePar
   $scope.article = $firebaseObject(ref);
   $scope.article.$loaded().then(function(){
     var chart = $scope.article['political-sum'];
-    sum = $scope.chart[0] + $scope.chart[1] + $scope.chart[2] + $scope.chart[3];
-    $scope.chart[0] = Math.round(chart['libertarian'] / sum * 100);
-    $scope.chart[1] = Math.round(chart['liberal'] / sum * 100);
-    $scope.chart[2] = Math.round(chart['green'] / sum * 100);
-    $scope.chart[3] = Math.round(chart['conservative'] / sum * 100);
+    sum = chart['Libertarian'] + chart['Liberal'] + chart['Green'] + chart['Conservative'];
+    $scope.chart[0] = Math.round(chart['Libertarian'] / sum * 100);
+    $scope.chart[1] = Math.round(chart['Liberal'] / sum * 100);
+    $scope.chart[2] = Math.round(chart['Green'] / sum * 100);
+    $scope.chart[3] = Math.round(chart['Conservative'] / sum * 100);
     if(!$scope.article.locations){
       $scope.article.locations = [];
     }
@@ -115,8 +113,7 @@ loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routePar
       $scope.article.data[i].source.name = url.toUpperCase();
       $scope.article.data[i].sentiment = Object.keys($scope.article.data[i]['political-sentiment']).reduce(function(a, b){ return $scope.article.data[i]['political-sentiment'][a] > $scope.article.data[i]['political-sentiment'][b] ? a : b })
     }
-    console.log($scope.article);
-    $('#loader').addClass('done').delay(500).hide(1);
+    $('#loader').hide();
     stop = true;
     setTimeout(queueLocs, 1);
   });

@@ -137,7 +137,7 @@ execfile("config.py", config)
 
 twitter = Twitter(auth = OAuth(config["access_key"], config["access_secret"], config["consumer_key"], config["consumer_secret"]))
 
-results = twitter.trends.place(_id = 23424977)
+results = twitter.trends.place(_id = 23424775)
 
 '''
 Initializing firebase
@@ -288,11 +288,9 @@ for location in results:
                     }
                 })
                 print "date",tags[i][2]
-                cnt = 0;
                 # 0 : libertarian; 1 : liberal; 2 : green; 3 : conservative
                 for j in political_sentiment:
-                    political_sum[cnt] += political_sentiment[j]
-                    cnt+=1
+                    political_sum[j] += political_sentiment[j]
                 mood_avg += mood
             if len(res) > 0:
                 mood_avg /= len(res)

@@ -137,7 +137,7 @@ execfile("config.py", config)
 
 twitter = Twitter(auth = OAuth(config["access_key"], config["access_secret"], config["consumer_key"], config["consumer_secret"]))
 
-results = twitter.trends.place(_id = 23424775)
+results = twitter.trends.place(_id = 23424977)
 
 '''
 Initializing firebase
@@ -177,14 +177,15 @@ for location in results:
                 results += searchKeyword(keyword.replace(" ","+"), 15, 16)
             for x in range(len(results)):
                 print results[x]["Url"]
-                article = Article(results[x]["Url"])
-                article.download()
+                article = None
                 try:
+                    article = Article(results[x]["Url"])
+                    article.download()
                     article.parse()
                 except:
                     print "Could not parse HTML file"
                     continue
-                if article.text.strip() == '':
+                if article.text.strip() == '' or 'embed.scribblelive' in article.html:
                     continue
                 entities = indicoio.named_entities(article.text)
                 for key, value in entities.iteritems():

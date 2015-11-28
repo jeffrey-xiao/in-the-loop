@@ -321,8 +321,8 @@ for location in results:
                 'data' : [],
                 'locations' : []
             }
-            if len(imageContent) > 0:
-                data['image'] = imageContent[0]['image']
+            if len(imgContent) > 0:
+                data['image'] = imgContent[0]['image']
             print places
             kk = 0
             for search in places:

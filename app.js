@@ -226,7 +226,7 @@ $(function(){
       var centerY = $(this).offset().top - scrollTop + $(this).outerHeight()/2;
       console.log(centerY);
       var centerX = $(this).offset().left + $(this).outerWidth()/2;/*scale('+maxScale+') */
-      $(this).css('transform', 'translate('+($(window).width()/2-centerX)+'px,'+($(window).height()/2-centerY-$('#navbar').outerHeight())+'px)');
+      $(this).css('transform', 'translate('+($(window).width()/2-centerX)+'px,'+($(window).height()/2-centerY+$('#navbar').outerHeight())+'px)');
     }else{
       $(this).css('transform', '');
     }

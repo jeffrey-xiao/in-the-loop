@@ -111,10 +111,8 @@ Initializing bing search api
 
 keyBing = 'w9Wv9QcXG2TrFgSdVdXNlcdDioOzGBmlNFhlu4994qk'
 credentialBing = 'Basic ' + (':%s' % keyBing).encode('base64')[:-1] # the "-1" is to remove the trailing "\n" which encode adds
-top = 30
-offset = 0
 
-def searchKeyword (keyword):
+def searchKeyword (keyword, top, offset):
     url = 'https://api.datamarket.azure.com/Bing/Search/News?' + \
       'Query=%s&$top=%d&$skip=%d&$format=json' % ("%27"+keyword+"%27", top, offset)
     request = urllib2.Request(url)
@@ -154,7 +152,7 @@ Main program
 #for location in results:
 #    for trend in location["trends"]:
         #keyword = trend["name"]
-keyword = "plannedparenthood"
+keyword = "Paris Attacks"
 allKeyWords = []
 allKeyWordsCounts = []
 allParagraphs = []
@@ -165,7 +163,8 @@ if keyword != None:
         keyword = keyword[1:]
     # process keyword
     print "Results for " + keyword
-    results = searchKeyword(keyword.replace(" ","+"))
+    results = searchKeyword(keyword.replace(" ","+"), 15, 0)
+    results += searchKeyword(keyword.replace(" ","+"), 15, 16)
     for x in range(len(results)):
         print results[x]["Url"]
         article = Article(results[x]["Url"])
@@ -173,7 +172,7 @@ if keyword != None:
         article.parse()
         paragraphs = article.text.split('\n')
         for p in paragraphs:
-            if p.strip() == '' or len(p) < 280:
+            if p.strip() == '' or len(p) < 280 or p.count('photo') > 4 or p.count('galler') > 4:
                 continue
             i = 0
             keyWords = indicoio.keywords(p)
@@ -220,7 +219,6 @@ if keyword != None:
             }
         })
     result = firebase.post('/', data)
-
 
 '''
 nameEntities = indicoio.named_entities(article.text)

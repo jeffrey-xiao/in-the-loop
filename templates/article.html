@@ -7,7 +7,7 @@
       </div>
       <div class="col-sm-6" id="article-content">
         <div ng-repeat="data in article.data" class="article-block wow fadeInUp" data-wow-duration="450ms">
-          <img ng-if="data.type=='image'" src="{{data.content}}" />
+          <img ng-if="data.type=='image'" src="img/uploads/{{data.content}}" />
           <p ng-if="data.type=='paragraph'">{{data.content}}</p>
           <p class="source"><span class="pull-left sentiment {{data.sentiment}}" ng-if="data.type=='paragraph'">{{data.sentiment}}</span><a href="{{data.source.url}}">Source: {{data.source.name}} | {{data.date}}</a></p>
         </div>

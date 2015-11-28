@@ -86,11 +86,12 @@ loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routePar
   var ref = new Firebase("https://in-the-loop.firebaseio.com/"+$routeParams.id);
   $scope.article = $firebaseObject(ref);
   $scope.article.$loaded().then(function(){
-    $scope.chart = $scope.article['political-sum'];
+    var chart = $scope.article['political-sum'];
     sum = $scope.chart[0] + $scope.chart[1] + $scope.chart[2] + $scope.chart[3];
-    for(var i = 0; i < 4; i++){
-      $scope.chart[i] = Math.round($scope.chart[i] / sum * 100);
-    }
+    $scope.chart[0] = Math.round(chart['libertarian'] / sum * 100);
+    $scope.chart[1] = Math.round(chart['liberal'] / sum * 100);
+    $scope.chart[2] = Math.round(chart['green'] / sum * 100);
+    $scope.chart[3] = Math.round(chart['conservative'] / sum * 100);
     if(!$scope.article.locations){
       $scope.article.locations = [];
     }

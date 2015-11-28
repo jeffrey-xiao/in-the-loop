@@ -217,3 +217,20 @@ function loaderAnimation(){
   // Start
   loop();
 }
+$(function(){
+  $('body').on('click', '.fullImage', function(){
+    $(this).toggleClass('full');
+    if($(this).hasClass('full')){
+      var maxScale = Math.min(($(window).width()-30)/$(this).width(), ($(window).height()-30)/$(this).height());
+      var centerY = $(this).offset().top + $(this).outerHeight()/2;
+      var centerX = $(this).offset().left + $(this).outerWidth()/2;
+      var halfWidth = $(this).outerWidth()/2*maxScale;
+      var halfHeight = $(this).outerHeight()/2*maxScale;
+      var top = centerY - halfHeight;
+      var left = centerX - halfWidth;
+      $(this).css('transform', 'scale('+maxScale+'), translate('+(15-left)+'px,'+(15-top)+'px)');
+    }else{
+      $(this).css('transform', '');
+    }
+  });
+});

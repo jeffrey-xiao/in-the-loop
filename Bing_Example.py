@@ -244,7 +244,10 @@ for location in results:
                             continue
                         alt = img.get("alt","")
                         if img_url[:4] == "http":
-                            filename = os.path.join(default_dir, str(i) + img_url.split("/")[-1])
+                            tmp_img_url = img_url.split("/")[-1];
+                            if '?' in tmp_img_url:
+                                tmp_img_url = tmp_img_url[0::tmp_img_url.index('?')]
+                            filename = os.path.join(default_dir, str(i) + tmp_img_url)
                             i+=1
                             img_data = opener.open(img_url)
                             f = open(filename,"wb")

@@ -12,6 +12,7 @@ import os
 import sys
 import struct
 import imghdr
+import time
 from BeautifulSoup import BeautifulSoup
 from googleplaces import GooglePlaces, types, lang
 GOOGLE_PLACES_API_KEY = 'AIzaSyC44BOXdbHi-OLwO18ZFCQgFsr_uFvS6DU'
@@ -198,6 +199,7 @@ for location in results:
                 def get_image_size(fname):
                     '''Determine the image type of fhandle and return its size.
                     from draco'''
+                    ext = 'png'
                     with open(fname, 'rb') as fhandle:
                         head = fhandle.read(24)
                         if len(head) != 24:
@@ -208,6 +210,7 @@ for location in results:
                                 return
                             width, height = struct.unpack('>ii', head[16:24])
                         elif imghdr.what(fname) == 'gif':
+                            ext = 'gif'
                             width, height = struct.unpack('<HH', head[6:10])
                         elif imghdr.what(fname) == 'jpeg':
                             try:
@@ -224,11 +227,12 @@ for location in results:
                                 # We are at a SOFn block
                                 fhandle.seek(1, 1)  # Skip `precision' byte.
                                 height, width = struct.unpack('>HH', fhandle.read(4))
+                                ext = 'jpeg'
                             except Exception: #IGNORE:W0703
                                 return
                         else:
                             return
-                        return width, height
+                        return width, height, ext
 
 
                 def get_images(URL):
@@ -244,21 +248,23 @@ for location in results:
                             continue
                         alt = img.get("alt","")
                         if img_url[:4] == "http":
-                            tmp_img_url = img_url.split("/")[-1];
-                            if '?' in tmp_img_url:
-                                tmp_img_url = tmp_img_url[0::tmp_img_url.index('?')]
-                            filename = os.path.join(default_dir, str(i) + tmp_img_url)
+                            name = str(time.time()) + str(i);
+                            filename = os.path.join(default_dir, name)
                             i+=1
                             img_data = opener.open(img_url)
                             f = open(filename,"wb")
                             f.write(img_data.read())
                             f.close()
                             size = get_image_size(filename)
+                            os.rename(filename, filename + size[2])
+                            name += size[2]
+                            filename = os.path.join(default_dir, name)
+
                             if size[0] < 200 or size[1] < 150:
                                 os.remove(filename)
                             else:
                                 info = {
-                                    "image": filename,
+                                    "image": name,
                                     "caption": alt,
                                     "src":    img_url,
                                     "date": article.publish_date,

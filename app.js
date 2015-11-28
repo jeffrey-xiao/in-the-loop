@@ -228,6 +228,7 @@ $(function(){
       var halfHeight = $(this).outerHeight()/2*maxScale;
       var top = centerY - halfHeight;
       var left = centerX - halfWidth;
+      console.log('scale('+maxScale+'), translate('+(15-left)+'px,'+(15-top)+'px)');
       $(this).css('transform', 'scale('+maxScale+'), translate('+(15-left)+'px,'+(15-top)+'px)');
     }else{
       $(this).css('transform', '');

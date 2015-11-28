@@ -1,0 +1,22 @@
+<a id="banner" style="background-image:url('{{articles[0].image}}')" href="#/article/{{articles[0].$id}}">
+  <div class="bottom">
+    <div class="container">
+      <h1>{{articles[0].header}} <span class="tag">#{{articles[0].tag}}</span></h1>
+      <p>{{articles[0].description.substring(0,120)}}..</p>
+    </div>
+  </div>
+</a>
+<div class="container" id="articles">
+  <a ng-repeat="article in articles" href="#/article/{{article.$id}}" class="article" ng-if="$index > 0">
+    <div class="row">
+      <div class="col-sm-9">
+        <h2>{{article.header}}<br/><span class="tag">#{{article.tag}}</span></h2>
+        <p>{{article.description}}</p>
+        <p>Read More...</p>
+      </div>
+      <div class="col-sm-3">
+        <img src="{{article.image}}" class="image" />
+      </div>
+    </div>
+  </a>
+</div>

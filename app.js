@@ -225,11 +225,7 @@ $(function(){
       var maxScale = Math.min(($(window).width()-30)/$(this).width(), ($(window).height()-30 - $('#navbar').outerHeight())/$(this).height());
       var centerY = $(this).offset().top - scrollTop + $(this).outerHeight()/2;
       var centerX = $(this).offset().left + $(this).outerWidth()/2;
-      var halfWidth = $(this).outerWidth()/2*maxScale;
-      var halfHeight = $(this).outerHeight()/2*maxScale;
-      var top = centerY - halfHeight;
-      var left = centerX - halfWidth;
-      $(this).css('transform', 'scale('+maxScale+') translate('+($(window).width()/2-centerX)+'px,'+($(window).height()/2-centerY)+'px)');
+      $(this).css('transform', 'scale('+maxScale+') translate('+($(window).width()/2-centerX)+'px,'+($(window).height()/2-centerY-$('#navbar').outerHeight())+'px)');
     }else{
       $(this).css('transform', '');
     }

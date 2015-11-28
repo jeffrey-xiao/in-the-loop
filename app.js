@@ -229,7 +229,7 @@ $(function(){
       var halfHeight = $(this).outerHeight()/2*maxScale;
       var top = centerY - halfHeight;
       var left = centerX - halfWidth;
-      $(this).css('transform', 'scale('+maxScale+') translate('+(left*-1)+'px,'+(top*-1+$('#navbar').outerHeight())+'px)');
+      $(this).css('transform', 'scale('+maxScale+') translate('+($(window).width()/2-centerX)+'px,'+($(window).height()/2-centerY)+'px)');
     }else{
       $(this).css('transform', '');
     }

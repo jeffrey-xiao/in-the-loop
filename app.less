@@ -31,6 +31,33 @@
     height:100%;
   }
 }
+#navbar{
+  position:fixed;
+  top:0px;
+  left:0px;
+  background:#FFF;
+  z-index:99;
+  text-align:center;
+  width:100%;
+  padding:5px 0px;
+  margin:0px;
+  border-bottom:1px solid #CCC;
+  a{
+    display:inline-block;
+    text-decoration:none;
+    opacity:0.8;
+    transition:opacity 200ms;
+    &:hover{
+      opacity:1;
+    }
+    img{
+      height:54px;
+    }
+  }
+}
+#spacer{
+  height:64px;
+}
 #banner{
   background-size:cover;
   display:block;

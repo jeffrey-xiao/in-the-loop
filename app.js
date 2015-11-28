@@ -19,6 +19,10 @@ function initMap(){
   mapLoaded = true;
 }
 loopApp.controller('HomeController', ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
+  $(window).scrollTop(0);
+  setTimeout(function(){
+    new WOW().init();
+  },1);
   var ref = new Firebase("https://in-the-loop.firebaseio.com/");
   $scope.articles = $firebaseArray(ref);
   $scope.articles.$loaded().then(function(){
@@ -47,6 +51,10 @@ loopApp.controller('HomeController', ['$scope', '$firebaseArray', function($scop
 }]);
 
 loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routeParams', function($scope, $firebaseObject, $routeParams) {
+  $(window).scrollTop(0);
+  setTimeout(function(){
+    new WOW().init();
+  },1);
   $('#loader').addClass('done').delay(500).hide(1);
   stop = true;
   var locs = [];

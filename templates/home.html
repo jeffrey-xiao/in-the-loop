@@ -1,16 +1,16 @@
 <a id="banner" style="background-image:url('{{articles[0].image}}')" href="#/article/{{articles[0].$id}}">
   <div class="bottom">
     <div class="container">
-      <h1>{{articles[0].header}} <span class="tag">#{{articles[0].tag}}</span></h1>
-      <p>{{articles[0].description.substring(0,120)}}..</p>
+      <h1 class="wow fadeIn">#{{articles[0].tag}} <span class="tag">{{articles[0].header}}</span></h1>
+      <p class="wow fadeIn" data-wow-delay="150ms">{{articles[0].description.substring(0,120)}}..</p>
     </div>
   </div>
 </a>
 <div class="container" id="articles">
-  <a ng-repeat="article in articles" href="#/article/{{article.$id}}" class="article" ng-if="$index > 0">
+  <a ng-repeat="article in articles" href="#/article/{{article.$id}}" class="article wow fadeInUp" ng-if="$index > 0" data-wow-duration="450ms">
     <div class="row">
       <div class="col-sm-9">
-        <h2>{{article.header}}<br/><span class="tag">#{{article.tag}}</span></h2>
+        <h2>#{{article.tag}}<br/><span class="tag">#{{article.header}}</span></h2>
         <p>{{article.description}}</p>
         <p>Read More...</p>
       </div>

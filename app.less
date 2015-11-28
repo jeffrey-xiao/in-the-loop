@@ -1,4 +1,19 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto+Slab:400,300,700);
+#article-zoom-bg{
+  background:rgba(255,255,255,0.8);
+  position:fixed;
+  top:0px;
+  display:none;
+  left:0px;
+  width:100%;
+  height:100%;
+  opacity:0;
+  transition:all 500ms;
+  z-index:97;
+  &.active{
+    opacity:1;
+  }
+}
 #loader{
   padding:0px;
   margin:0px;
@@ -154,11 +169,11 @@ a.article{
         cursor:zoom-in;
         transition:all 500ms;
         position:relative;
-        z-index:98;
+        z-index:96;
         box-shadow:none;
         &.full{
+          z-index:98;
           cursor:zoom-out;
-          box-shadow:0px 0px 20px rgba(0,0,0,0.5);
         }
       }
       .sentiment{

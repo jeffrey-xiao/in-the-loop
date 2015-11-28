@@ -237,7 +237,7 @@ $(function(){
     }else{
       $(this).css('z-index', '98');
       setTimeout(function(){
-        $(this).css('z-index', '');
+        $('.fullImage').css('z-index', '');
       },500);
       $('#article-zoom-bg').removeClass('show').delay(500).hide(1);
       $(this).css('transform', '');

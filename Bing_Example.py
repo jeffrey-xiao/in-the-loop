@@ -6,6 +6,12 @@ from firebase import firebase
 from random import shuffle
 from twitter import *
 from newspaper import Article
+import wolframalpha
+import simplejson
+from googleplaces import GooglePlaces, types, lang
+GOOGLE_PLACES_API_KEY = 'AIzaSyC44BOXdbHi-OLwO18ZFCQgFsr_uFvS6DU'
+google_places = GooglePlaces(GOOGLE_PLACES_API_KEY)
+wolframClient = wolframalpha.Client('WY8W73-T5845VUK2Q')
 '''
 Max matching algorithm to determine optimal selection of paragraphs
 '''
@@ -125,14 +131,14 @@ def searchKeyword (keyword, top, offset):
 '''
 Initializing twitter
 '''
-
+'''
 config = {}
 execfile("config.py", config)
 
 twitter = Twitter(auth = OAuth(config["access_key"], config["access_secret"], config["consumer_key"], config["consumer_secret"]))
 
 results = twitter.trends.place(_id = 23424775)
-
+'''
 '''
 Initializing firebase
 '''
@@ -151,11 +157,15 @@ Main program
 
 for location in results:
     for trend in location["trends"]:
+#for z in range(1):
+    #for trend in ["UFCSeoul", "Paris Attack", "Malta"]:
         keyword = trend["name"]
+        #keyword =trend
         allKeyWords = []
         allKeyWordsCounts = []
         allParagraphs = []
         tags = []
+        places = []
         adjKP = [[False for i in range(1000)] for j in range(1000)] # rows are paragraphs, columns are keywords
         if keyword != None:
             if keyword[0] == '#':
@@ -169,6 +179,12 @@ for location in results:
                 article = Article(results[x]["Url"])
                 article.download()
                 article.parse()
+                entities = indicoio.named_entities(article.text)
+                for key, value in entities.iteritems():
+                    if value['categories']['location'] > 0.7:
+                        key = key.lower()
+                        if key not in places:
+                            places.append(key)
                 paragraphs = article.text.split('\n')
                 for p in paragraphs:
                     if p.strip() == '' or len(p) < 280 or p.count('photo') > 4 or p.count('galler') > 4:
@@ -211,8 +227,33 @@ for location in results:
                 'header' : tag,
                 'tag': keyword,
                 'image': 'http://lorempixel.com/1280/720/sporpyts/4/',
-                'data' : []
+                'data' : [],
+                'locations' : []
             }
+            print places
+            for search in places:
+                query_result = google_places.nearby_search(
+                        location=search)
+                for place in query_result.places:
+
+                    place.get_details()
+                    if 'neighborhood' in place.details['types'] or 'locality' in place.details['types']:
+                        wolfRes = wolframClient.query(search)
+                        photos = None
+                        if 'photos' in place.details:
+                            photos = place.details['photos']
+                        loc = {
+                            'name': place.details['formatted_address'],
+                            'photo': photos,
+                            'description': [],
+                            'lat': place.details['geometry']['location']['lat'],
+                            'lon': place.details['geometry']['location']['lng']
+                        }
+                        for pod in wolfRes.pods:
+                            loc['description'].append(pod.main.text)
+                        data['locations'].append(loc)
+                    break
+
             political_sum = [0]*4
             mood_avg = 0
             for i in res:
@@ -239,7 +280,7 @@ for location in results:
             if len(res) > 0:
                 mood_avg /= len(res)
             data['political-sum'] = political_sum
-            data['mood-avg'] = mood_avg 
+            data['mood-avg'] = mood_avg
             result = firebase.post('/', data)
 
 '''

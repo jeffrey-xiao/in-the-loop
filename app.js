@@ -14,7 +14,13 @@ loopApp.config(['$routeProvider', function($routeProvider) {
   otherwise({
     redirectTo: '/'
   });
-}]);
+}]).run(function($rootScope, $location) {
+  $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+    stop = false;
+    $('#loader').show().removeClass('done');
+    loaderAnimation();
+  });
+});
 function initMap(){
   mapLoaded = true;
 }
@@ -88,6 +94,24 @@ loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routePar
     for(var i = 0; i < $scope.article.locations.length; i++){
       locs.push({lat:$scope.article.locations[i].lat, lon:$scope.article.locations[i].lon});
     }
+    for(var i = 0; i < $scope.article.data.length; i++){
+      var url = $scope.article.data[i].source.url;
+      url = url.replace('http://', '');
+      url = url.replace('https://', '');
+      url = url.replace('www.', '');
+      url = url.replace('.co.', '.');
+      url = url.substring(0, url.indexOf('/'));
+      url = url.substring(0, url.lastIndexOf('.'));
+      url = url.substring(url.lastIndexOf('.')+1);
+      if(!$scope.article.data[i].date){
+        $scope.article.data[i].date = 'N/A';
+      }else{
+        $scope.article.data[i].date = $scope.article.data[i].date.substring(0, $scope.article.data[i].date.indexOf('T'));
+      }
+      $scope.article.data[i].source.name = url.toUpperCase();
+      $scope.article.data[i].sentiment = Object.keys($scope.article.data[i]['political-sentiment']).reduce(function(a, b){ return $scope.article.data[i]['political-sentiment'][a] > $scope.article.data[i]['political-sentiment'][b] ? a : b })
+    }
+    console.log($scope.article);
     $('#loader').addClass('done').delay(500).hide(1);
     stop = true;
     setTimeout(queueLocs, 1);
@@ -189,6 +213,3 @@ function loaderAnimation(){
   // Start
   loop();
 }
-$(function(){
-  loaderAnimation();
-});

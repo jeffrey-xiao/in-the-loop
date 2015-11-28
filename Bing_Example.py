@@ -378,7 +378,6 @@ for location in results:
                 })
                 if imageI < len(imgContent):
                     imageI+=1
-                    print imgContent[imageI]
                     data['data'].append({
                         'content': imgContent[imageI]['src'],
                         'type': 'image',

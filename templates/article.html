@@ -20,7 +20,7 @@
         <div class="article-card" ng-repeat="location in article.locations">
           <h3>{{location.name}}</h3>
           <div class="map-embed"></div>
-          <p ng-repeat="desc in location.description track by $index" ng-if="$index < 3">{{desc}}</p>
+          <p ng-repeat="desc in location.description track by $index" ng-if="$index < 5">{{desc}}</p>
         </div>
       </div>
     </div>

@@ -40,19 +40,21 @@ def get_image_size(fname):
             return
         return width, height
 
+content = []
+
 def get_images(URL):
     default_dir = "LillianImages"
     opener = urllib2.build_opener()
     urllib2.install_opener(opener)
     soup = BeautifulSoup(urllib2.urlopen(URL).read())
     imgs = soup.findAll("img",{"alt":True, "src":True})
-
+    i = 0
     for img in imgs:
         img_url = img["src"]
         alt = img.get("alt","")
-        print alt
         if img_url[:4] == "http":
-            filename = os.path.join(default_dir, img_url.split("/")[-1])
+            filename = os.path.join(default_dir, str(i) + img_url.split("/")[-1])
+            i+=1
             img_data = opener.open(img_url)
             f = open(filename,"wb")
             f.write(img_data.read())
@@ -60,4 +62,22 @@ def get_images(URL):
             size = get_image_size(filename)
             if size[0] < 200 or size[1] < 150:
                 os.remove(filename)
+            else:
+                info = {
+                    "image": filename,
+                    "caption": alt,
+                    "src":    img_url,
+                }
+                content.append(info)
     return
+
+try:
+    get_images("http://www.nytimes.com/2015/11/29/us/colorado-springs-planned-parenthood-shooting.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=a-lede-package-region&region=top-news&WT.nav=top-news")
+except:
+    print "Fuck"
+
+print content
+
+import time
+start_time = time.time()
+print("--- %s seconds ---" % (time.time() - start_time))

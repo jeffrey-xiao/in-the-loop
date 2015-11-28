@@ -15,7 +15,7 @@ import imghdr
 import time
 from BeautifulSoup import BeautifulSoup
 from googleplaces import GooglePlaces, types, lang
-GOOGLE_PLACES_API_KEY = 'AIzaSyC44BOXdbHi-OLwO18ZFCQgFsr_uFvS6DU'
+GOOGLE_PLACES_API_KEY = 'AIzaSyDFbP7p8fYhObGu5RuCrj5ynnwZ9yYWgtI'
 google_places = GooglePlaces(GOOGLE_PLACES_API_KEY)
 wolframClient = wolframalpha.Client('WY8W73-T5845VUK2Q')
 '''
@@ -143,7 +143,7 @@ execfile("config.py", config)
 
 twitter = Twitter(auth = OAuth(config["access_key"], config["access_secret"], config["consumer_key"], config["consumer_secret"]))
 
-results = twitter.trends.place(_id = 23424775)
+results = twitter.trends.place(_id = 23424748)
 
 '''
 Initializing firebase
@@ -326,7 +326,7 @@ for location in results:
                 'description': description,
                 'header' : tag,
                 'tag': keyword,
-                'image': 'http://lorempixel.com/1280/720/sporpyts/4/',
+                'image': 'http://lorempixel.com/1280/720/sports/4/',
                 'data' : [],
                 'locations' : []
             }

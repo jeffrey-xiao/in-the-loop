@@ -43,7 +43,6 @@ loopApp.controller('HomeController', ['$scope', '$firebaseArray', function($scop
       }
     }
     for(var i = 0; i < total; i++){
-	$scope.articles[i].image = $scope.articles[i].image.replace('/usr/share/nginx/html/img/uploads/','');
       $('<img src="'+$scope.articles[i].image+'" />').load(function(){
         loaded++;
         if(loaded == total){ done(); }
@@ -116,9 +115,6 @@ loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routePar
       if($scope.article.data[i].type=='paragraph'){
         $scope.article.data[i].sentiment = Object.keys($scope.article.data[i]['political-sentiment']).reduce(function(a, b){ return $scope.article.data[i]['political-sentiment'][a] > $scope.article.data[i]['political-sentiment'][b] ? a : b });
       }
-	if($scope.article.data[i].type=='image'){
-		$scope.article.data[i].content = $scope.article.data[i].content.replace('/usr/share/nginx/html/img/uploads/','');
-	}
     }
     $('#loader').hide();
     stop = true;

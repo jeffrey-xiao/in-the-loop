@@ -1,7 +1,10 @@
 import urllib2
 import json
 import Queue
+import indicoio
 from twitter import *
+#from firebase import firebase
+from newspaper import Article
 
 '''
 Aho-corasick algorithm -- unused
@@ -101,23 +104,61 @@ def searchKeyword (keyword):
 '''
 Initializing twitter
 '''
-
+'''
 config = {}
 execfile("config.py", config)
 
 twitter = Twitter(auth = OAuth(config["access_key"], config["access_secret"], config["consumer_key"], config["consumer_secret"]))
 
 results = twitter.trends.place(_id = 23424775)
+'''
+'''
+Initializing firebase
+'''
+'''
+firebase = firebase.FirebaseApplication('https://in-the-loop.firebaseio.com', None)
+'''
+'''
+Initializing indico.io
+'''
+indicoio.config.api_key = '4d5aca20b4ea5a85a667de57c23d2e50'
 
-for location in results:
-    for trend in location["trends"]:
-        keyword = trend["name"]
-        if keyword != None:
-            if keyword[0] == '#':
-                keyword = keyword[1:]
-            # process keyword
-            print "Results for " + keyword
-            results = searchKeyword(keyword.replace(" ","+"))
-            for x in range(len(results)):
-                print results[x]["Url"]
-            
+
+'''
+Main program
+'''
+
+#for location in results:
+#    for trend in location["trends"]:
+        #keyword = trend["name"]
+keyword = "plannedparenthood"
+if keyword != None:
+    if keyword[0] == '#':
+        keyword = keyword[1:]
+    # process keyword
+    print "Results for " + keyword
+    results = searchKeyword(keyword.replace(" ","+"))
+    for x in range(len(results)):
+        print results[x]["Url"]
+        article = Article(results[x]["Url"])
+        article.download()
+        article.parse()
+        
+        nameEntities = indicoio.named_entities(article.text)
+        keyWords = indicoio.keywords(article.text)
+        paragraphs = article.text.split('\n')
+        ans = (0, "")
+        
+        for p in paragraphs:
+            res = 0.0
+            for word in p.split():
+                for keyWord in keyWords:
+                    if word == keyWord:
+                        res += keyWords[word]
+                for nameEntity in nameEntities:
+                    if word == nameEntity:
+                        res += nameEntities[word]['confidence']
+            if res > ans[0]:
+                ans = (res, p)
+        print ans[1]
+        #firebase.post('/users', results[x]["Url"])

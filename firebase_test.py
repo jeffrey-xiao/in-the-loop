@@ -17,5 +17,4 @@ data = {
         }
     ]
 }
-result = firebase.post('/', data)
-#firebase.delete('/users', "1")
+result = firebase.post('/users', "a")

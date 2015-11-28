@@ -371,7 +371,7 @@ for location in results:
                         'url': tags[i][1]
                     }
                 })
-                if imageI < imgContent.size():
+                if imageI < len(imgContent):
                     data['data'].append({
                         'content': imgContent[i].url,
                         'type': 'image',

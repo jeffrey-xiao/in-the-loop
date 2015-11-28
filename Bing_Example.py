@@ -354,7 +354,12 @@ for location in results:
                 except:
                     print "Cannot parse location"
 
-            political_sum = {}
+            political_sum = {
+                'Libertarian':0.0,
+                'Liberal':0.0,
+                'Green':0.0,
+                'Conservative':0.0
+            }
             mood_avg = 0
             imageI = 0
             for i in res:

@@ -111,7 +111,9 @@ loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routePar
         $scope.article.data[i].date = $scope.article.data[i].date.substring(0, $scope.article.data[i].date.indexOf('T'));
       }
       $scope.article.data[i].source.name = url.toUpperCase();
-      $scope.article.data[i].sentiment = Object.keys($scope.article.data[i]['political-sentiment']).reduce(function(a, b){ return $scope.article.data[i]['political-sentiment'][a] > $scope.article.data[i]['political-sentiment'][b] ? a : b })
+      if($scope.article.data[i].type=='paragraph'){
+        $scope.article.data[i].sentiment = Object.keys($scope.article.data[i]['political-sentiment']).reduce(function(a, b){ return $scope.article.data[i]['political-sentiment'][a] > $scope.article.data[i]['political-sentiment'][b] ? a : b });
+      }
     }
     $('#loader').hide();
     stop = true;

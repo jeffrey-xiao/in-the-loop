@@ -5,10 +5,10 @@ import indicoio
 from firebase import firebase
 from random import shuffle
 from twitter import *
-#from firebase import firebase
 from newspaper import Article
-
-firebase = firebase.FirebaseApplication('https://in-the-loop.firebaseio.com', None)
+'''
+Max matching algorithm to determine optimal selection of paragraphs
+'''
 prev = []
 v = []
 def getMatching (N, M, adj):
@@ -125,20 +125,20 @@ def searchKeyword (keyword, top, offset):
 '''
 Initializing twitter
 '''
-'''
+
 config = {}
 execfile("config.py", config)
 
 twitter = Twitter(auth = OAuth(config["access_key"], config["access_secret"], config["consumer_key"], config["consumer_secret"]))
 
 results = twitter.trends.place(_id = 23424775)
-'''
+
 '''
 Initializing firebase
 '''
-'''
+
 firebase = firebase.FirebaseApplication('https://in-the-loop.firebaseio.com', None)
-'''
+
 '''
 Initializing indico.io
 '''
@@ -149,95 +149,98 @@ indicoio.config.api_key = '4d5aca20b4ea5a85a667de57c23d2e50'
 Main program
 '''
 
-#for location in results:
-#    for trend in location["trends"]:
-        #keyword = trend["name"]
-keyword = "terrorist"
-allKeyWords = []
-allKeyWordsCounts = []
-allParagraphs = []
-tags = []
-adjKP = [[False for i in range(1000)] for j in range(1000)] # rows are paragraphs, columns are keywords
-if keyword != None:
-    if keyword[0] == '#':
-        keyword = keyword[1:]
-    # process keyword
-    print "Results for " + keyword
-    results = searchKeyword(keyword.replace(" ","+"), 15, 0)
-    results += searchKeyword(keyword.replace(" ","+"), 15, 16)
-    for x in range(len(results)):
-        print results[x]["Url"]
-        article = Article(results[x]["Url"])
-        article.download()
-        article.parse()
-        paragraphs = article.text.split('\n')
-        for p in paragraphs:
-            if p.strip() == '' or len(p) < 280 or p.count('photo') > 4 or p.count('galler') > 4:
-                continue
-            i = 0
-            keyWords = indicoio.keywords(p)
-            if p in allParagraphs:
-                i = allParagraphs.index(p)
-            else:
-                allParagraphs.append(p)
-                tags.append((article.title, article.url))
-                i = len(allParagraphs)-1
-            for keyWord in keyWords:
-                if keyWord in allKeyWords:
-                    idx = allKeyWords.index(keyWord)
-                    allKeyWordsCounts[idx] += 1
-                    adjKP[i][idx] = True
-                else:
-                    allKeyWords.append(keyWord)
-                    allKeyWordsCounts.append(1)
-                    adjKP[i][len(allKeyWords)-1] = True
-    print allKeyWords
-    pairs = []
-    for i in range(0, len(allKeyWords)):
-        pairs.append([allKeyWordsCounts[i], i])
-    sorted(pairs)
-    for i in range(0, len(pairs)):
-        if i > 20:
-            for j in range(0, len(allParagraphs)):
-                adjKP[j][pairs[i][1]] = False
-    res = getMatching(len(allParagraphs), len(allKeyWords), adjKP)
-    print res
-    description = allParagraphs[res[0]].encode('utf-8').strip()
-    if len(res) == 0:
-        description = "No relevant articles found."
-    data = {
-        'description': description,
-        'header' : tags[res[0]][0],
-        'tag': keyword,
-        'image': 'http://lorempixel.com/1280/720/sporpyts/4/',
-        'data' : []
-    }
-    political_sum = [0]*4
-    mood_avg = 0
-    for i in res:
-        political_sentiment = indicoio.political(allParagraphs[i].encode('utf-8').strip())
-        mood = indicoio.sentiment(allParagraphs[i].encode('utf-8').strip())
-        data['data'].append({
-            'content':  allParagraphs[i].encode('utf-8').strip(),
-            'type': 'paragraph',
-            'political-sentiment' : political_sentiment,
-            'mood' : mood,
-            'source': {
-                'name': 'Source',
-                'url': tags[i][1]
+for location in results:
+    for trend in location["trends"]:
+        keyword = trend["name"]
+        allKeyWords = []
+        allKeyWordsCounts = []
+        allParagraphs = []
+        tags = []
+        adjKP = [[False for i in range(1000)] for j in range(1000)] # rows are paragraphs, columns are keywords
+        if keyword != None:
+            if keyword[0] == '#':
+                keyword = keyword[1:]
+            # process keyword
+            print "Results for " + keyword
+            results = searchKeyword(keyword.replace(" ","+"), 15, 0)
+            results += searchKeyword(keyword.replace(" ","+"), 15, 16)
+            for x in range(len(results)):
+                print results[x]["Url"]
+                article = Article(results[x]["Url"])
+                article.download()
+                article.parse()
+                paragraphs = article.text.split('\n')
+                for p in paragraphs:
+                    if p.strip() == '' or len(p) < 280 or p.count('photo') > 4 or p.count('galler') > 4:
+                        continue
+                    i = 0
+                    keyWords = indicoio.keywords(p)
+                    if p in allParagraphs:
+                        i = allParagraphs.index(p)
+                    else:
+                        allParagraphs.append(p)
+                        tags.append((article.title, article.url, article.publish_date))
+                        i = len(allParagraphs)-1
+                    for keyWord in keyWords:
+                        if keyWord in allKeyWords:
+                            idx = allKeyWords.index(keyWord)
+                            allKeyWordsCounts[idx] += 1
+                            adjKP[i][idx] = True
+                        else:
+                            allKeyWords.append(keyWord)
+                            allKeyWordsCounts.append(1)
+                            adjKP[i][len(allKeyWords)-1] = True
+            print allKeyWords
+            pairs = []
+            for i in range(0, len(allKeyWords)):
+                pairs.append([allKeyWordsCounts[i], i])
+            sorted(pairs)
+            for i in range(0, len(pairs)):
+                if i > 20:
+                    for j in range(0, len(allParagraphs)):
+                        adjKP[j][pairs[i][1]] = False
+            res = getMatching(len(allParagraphs), len(allKeyWords), adjKP)
+            print res
+            description = "No relevant articles found."
+            tag = "No relevant header found"
+            if len(res) > 0:
+                description = allParagraphs[res[0]].encode('utf-8').strip()
+                tag = tags[res[0]][0]
+            data = {
+                'description': description,
+                'header' : tag,
+                'tag': keyword,
+                'image': 'http://lorempixel.com/1280/720/sporpyts/4/',
+                'data' : []
             }
-        })
-        cnt = 0;
-        # 0 : libertarian; 1 : green; 2 : liberal; 3 : conservative
-        for j in political_sentiment:
-            political_sum[cnt] += political_sentiment[j]
-            cnt+=1
-        mood_avg += mood
-    if len(res) > 0:
-        mood_avg /= len(res)
-    data['political-sum'] = political_sum
-    data['mood-avg'] = mood_avg 
-    result = firebase.post('/', data)
+            political_sum = [0]*4
+            mood_avg = 0
+            for i in res:
+                political_sentiment = indicoio.political(allParagraphs[i].encode('utf-8').strip())
+                mood = indicoio.sentiment(allParagraphs[i].encode('utf-8').strip())
+                data['data'].append({
+                    'content':  allParagraphs[i].encode('utf-8').strip(),
+                    'type': 'paragraph',
+                    'political-sentiment' : political_sentiment,
+                    'mood' : mood,
+                    'date' : tags[i][2],
+                    'source': {
+                        'name': 'Source',
+                        'url': tags[i][1]
+                    }
+                })
+                print "date",tags[i][2]
+                cnt = 0;
+                # 0 : libertarian; 1 : green; 2 : liberal; 3 : conservative
+                for j in political_sentiment:
+                    political_sum[cnt] += political_sentiment[j]
+                    cnt+=1
+                mood_avg += mood
+            if len(res) > 0:
+                mood_avg /= len(res)
+            data['political-sum'] = political_sum
+            data['mood-avg'] = mood_avg 
+            result = firebase.post('/', data)
 
 '''
 nameEntities = indicoio.named_entities(article.text)
@@ -258,5 +261,3 @@ for p in paragraphs:
         ans = (res, p)
 print ans[1]
 '''
-
-        #firebase.post('/users', results[x]["Url"])

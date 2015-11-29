@@ -219,7 +219,20 @@ function loaderAnimation(){
   // Start
   loop();
 }
+$(window).scroll(function(){
+  if($(window).scrollTop() < 100){
+    $('#navbar a').removeClass('down');
+  }else{
+    $('#navbar a').addClass('down');
+  }
+});
 $(function(){
+  $(window).trigger('scroll');
+  $('#navbar a').click(function(){
+    if($(this).hasClass('down')){
+      $('document,body').animate({scrollTop:0}, 500);
+    }
+  });
   $('body').on('click', '#article-zoom-bg', function(){
     $('.fullImage.full').trigger('click');
   });

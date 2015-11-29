@@ -240,6 +240,7 @@ for location in results:
                     opener = urllib2.build_opener()
                     urllib2.install_opener(opener)
                     soup = BeautifulSoup(urllib2.urlopen(URL).read())
+                    [x.extract() for x in soup.findAll('a')] #remove all links (including ads!!)
                     imgs = soup.findAll("img",{"alt":True, "src":True})
                     i = 0
                     for img in imgs:

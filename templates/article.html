@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-sm-3" id="article-overview">
         <img src="img/uploads/{{article.image}}" />
-        <h1>#{{article.tag}}<br/><span class="tag">{{article.header}}</span></h1>
+        <h1>#{{article.tag}}&nbsp;<span ng-bind-html="article.mood" class="emoji"></span><br/><span class="tag">{{article.header}}</span></h1>
       </div>
       <div class="col-sm-6" id="article-content">
         <div ng-repeat="data in article.data" class="article-block wow fadeInUp" data-wow-duration="450ms">

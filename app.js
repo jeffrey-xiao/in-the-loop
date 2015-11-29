@@ -77,7 +77,7 @@ loopApp.controller('HomeController', ['$scope', '$firebaseArray', '$rootScope', 
   });
 }]);
 
-loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routeParams', '$rootScope', function($scope, $firebaseObject, $routeParams, $rootScope) {
+loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routeParams', '$rootScope', '$sce', function($scope, $firebaseObject, $routeParams, $rootScope, $sce) {
   $(window).scrollTop(0);
   setTimeout(function(){
     new WOW().init();
@@ -107,6 +107,7 @@ loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routePar
   var ref = new Firebase("https://in-the-loop.firebaseio.com/"+$routeParams.id);
   $scope.article = $firebaseObject(ref);
   $scope.article.$loaded().then(function(){
+    $scope.article.mood = $sce.trustAsHtml(returnEmoji($scope.article['mood-avg']));
     $rootScope.page = '#' + $scope.article.tag;
     var chart = $scope.article['political-sum'];
     sum = chart['Libertarian'] + chart['Liberal'] + chart['Green'] + chart['Conservative'];

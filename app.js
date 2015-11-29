@@ -24,8 +24,9 @@ loopApp.config(['$routeProvider', function($routeProvider) {
 function initMap(){
   mapLoaded = true;
 }
-loopApp.controller('HomeController', ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
+loopApp.controller('HomeController', ['$scope', '$firebaseArray', '$rootScope', function($scope, $firebaseArray, $rootScope) {
   $(window).scrollTop(0);
+  $rootScope.page="Home";
   setTimeout(function(){
     new WOW().init();
   },1);
@@ -54,7 +55,7 @@ loopApp.controller('HomeController', ['$scope', '$firebaseArray', function($scop
   });
 }]);
 
-loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routeParams', function($scope, $firebaseObject, $routeParams) {
+loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routeParams', '$rootScope', function($scope, $firebaseObject, $routeParams, $rootScope) {
   $(window).scrollTop(0);
   setTimeout(function(){
     new WOW().init();
@@ -84,6 +85,7 @@ loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routePar
   var ref = new Firebase("https://in-the-loop.firebaseio.com/"+$routeParams.id);
   $scope.article = $firebaseObject(ref);
   $scope.article.$loaded().then(function(){
+    $rootScope.page = '#' + $scope.article.tag;
     var chart = $scope.article['political-sum'];
     sum = chart['Libertarian'] + chart['Liberal'] + chart['Green'] + chart['Conservative'];
     $scope.chart[0] = Math.round(chart['Libertarian'] / sum * 100);

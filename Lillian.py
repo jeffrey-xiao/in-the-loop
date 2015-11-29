@@ -47,8 +47,12 @@ def get_images(URL):
     opener = urllib2.build_opener()
     urllib2.install_opener(opener)
     soup = BeautifulSoup(urllib2.urlopen(URL).read())
+    # href_tags = soup.find_all(href=True)
+    [x.extract() for x in soup.findAll('a')]
+
     imgs = soup.findAll("img",{"alt":True, "src":True})
     i = 0
+
     for img in imgs:
         img_url = img["src"]
         alt = img.get("alt","")
@@ -72,7 +76,7 @@ def get_images(URL):
     return
 
 try:
-    get_images("http://www.nytimes.com/2015/11/29/us/colorado-springs-planned-parenthood-shooting.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=a-lede-package-region&region=top-news&WT.nav=top-news")
+    get_images("http://www.cbc.ca/news/politics/world-is-going-to-be-looking-to-canada-on-pot-legalization-jane-philpott-says-1.3340383")
 except:
     print "Fuck"
 

@@ -1,7 +1,7 @@
 import indicoio
 from newspaper import Article 
 
-indicoio.config.api_key = '4d5aca20b4ea5a85a667de57c23d2e50'
+indicoio.config.api_key = ''
 
 filein = open("in.txt", "r")
 fileout = open("out.txt", "w")

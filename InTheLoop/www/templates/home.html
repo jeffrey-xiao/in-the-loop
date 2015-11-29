@@ -1,0 +1,25 @@
+<a id="banner" style="background-image:url('http://beintheloop.me/img/uploads/{{articles[0].image}}')" href="#/article/{{articles[0].$id}}">
+  <div class="bottom">
+    <div class="container">
+      <h1>#{{articles[0].tag}} <span class="tag">{{articles[0].header}}</span></h1>
+      <p>{{articles[0].description.substring(0,120)}}..</p>
+    </div>
+  </div>
+</a>
+<div class="container" id="articles">
+  <a ng-repeat="article in articles" href="#/article/{{article.$id}}" class="article" ng-if="$index > 0">
+    <div class="row">
+      <div class="col-sm-3 visible-xs">
+        <img src="http://beintheloop.me/img/uploads/{{article.image}}" class="image" /><br/><br/>
+      </div>
+      <div class="col-sm-9">
+        <h2>#{{article.tag}}<div class="inline-chart"><div ng-repeat="value in article.politicalSums" class="inline-chart-bar" style="background:{{colours[$index]}};height:{{value}}%"></div></div><span ng-bind-html="article.emoji" class="emoji"></span><br/><span class="tag">#{{article.header}}</span></h2>
+        <p>{{article.description.substring(0, 500)}}..</p>
+        <p>Read More...</p>
+      </div>
+      <div class="col-sm-3 hidden-xs">
+        <img src="http://beintheloop.me/img/uploads/{{article.image}}" class="image" />
+      </div>
+    </div>
+  </a>
+</div>

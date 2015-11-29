@@ -179,9 +179,9 @@ for location in results:
                 keyword = keyword[1:]
             # process keyword
             print "Results for " + keyword
-            results = searchKeyword(keyword.replace(" ","+"), 15, 0)
-            if len(results) == 15:
-                results += searchKeyword(keyword.replace(" ","+"), 15, 16)
+            results = searchKeyword(keyword.replace(" ","+"), 2, 0)
+            #if len(results) == 15:
+            #    results += searchKeyword(keyword.replace(" ","+"), 15, 16)
             for x in range(len(results)):
                 print results[x]["Url"]
                 article = None
@@ -374,7 +374,7 @@ for location in results:
             }
             mood_avg = 0
             imageI = 0
-            imgContent.sort(key=lambda x: (0 if x.caption.strip() == '' else 1), reverse=True)
+            imgContent.sort(key=lambda x: (0 if 'caption' not in x or x['caption'].strip() == '' else 1), reverse=True)
             for i in res:
                 political_sentiment = indicoio.political(allParagraphs[i].encode('utf-8').strip())
                 mood = indicoio.sentiment(allParagraphs[i].encode('utf-8').strip())

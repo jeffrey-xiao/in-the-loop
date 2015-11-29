@@ -233,6 +233,12 @@ function loaderAnimation(){
 }
 $(window).scroll(function(){
   if($(window).scrollTop() < 100){
+    if($('#navbar a').hasClass('down')){
+      $('#navbar a').addClass('downComplete');
+      setTimeout(function(){
+        $('#navbar a').removeClass('downComplete');
+      },200)
+    }
     $('#navbar a').removeClass('down');
   }else{
     $('#navbar a').addClass('down');

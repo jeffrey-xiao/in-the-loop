@@ -288,7 +288,7 @@ for location in results:
                             places.append(key)
                 paragraphs = article.text.split('\n')
                 for p in paragraphs:
-                    if p.strip() == '' or len(p) < 280 or p.count('photo') > 4 or p.count('galler') > 4:
+                    if p.strip() == '' or len(p) < 280 or p.count('photo') > 4 or p.count('galler') > 4 or len(p) > 2500:
                         continue
                     i = 0
                     keyWords = indicoio.keywords(p)

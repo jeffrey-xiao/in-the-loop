@@ -229,7 +229,7 @@ $(window).scroll(function(){
 $(function(){
   $(window).trigger('scroll');
   $('#navbar a').click(function(){
-    if($(this).hasClass('down')){
+    if($(this).hasClass('down') && location.hash.indexOf('article') == -1){
       $('document,body').animate({scrollTop:0}, 500);
     }
   });

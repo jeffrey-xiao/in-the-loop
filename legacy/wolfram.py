@@ -1,9 +1,9 @@
 import wolframalpha
 import simplejson
 from googleplaces import GooglePlaces, types, lang
-GOOGLE_PLACES_API_KEY = 'AIzaSyC44BOXdbHi-OLwO18ZFCQgFsr_uFvS6DU'
+GOOGLE_PLACES_API_KEY = ''
 google_places = GooglePlaces(GOOGLE_PLACES_API_KEY)
-wolframClient = wolframalpha.Client('WY8W73-T5845VUK2Q')
+wolframClient = wolframalpha.Client('')
 places = ['Paris', 'Europe',  'Ontario', 'USA', '9 Havagal Crescent, Markham, Ontario']
 locations = []
 for search in places:

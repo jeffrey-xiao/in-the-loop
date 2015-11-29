@@ -257,8 +257,8 @@ for location in results:
                             f.write(img_data.read())
                             f.close()
                             size = get_image_size(filename)
-                            os.rename(filename, filename + size[2])
-                            name += size[2]
+                            os.rename(filename, filename + "." + size[2])
+                            name += "." + size[2]
                             filename = os.path.join(default_dir, name)
 
                             if size[0] < 200 or size[1] < 150:

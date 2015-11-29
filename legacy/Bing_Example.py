@@ -15,9 +15,9 @@ import imghdr
 import time
 from BeautifulSoup import BeautifulSoup
 from googleplaces import GooglePlaces, types, lang
-GOOGLE_PLACES_API_KEY = 'AIzaSyDFbP7p8fYhObGu5RuCrj5ynnwZ9yYWgtI'
+GOOGLE_PLACES_API_KEY = ''
 google_places = GooglePlaces(GOOGLE_PLACES_API_KEY)
-wolframClient = wolframalpha.Client('WY8W73-T5845VUK2Q')
+wolframClient = wolframalpha.Client('')
 '''
 Max matching algorithm to determine optimal selection of paragraphs
 '''
@@ -121,7 +121,7 @@ def init ():
 Initializing bing search api
 '''
 
-keyBing = 'w9Wv9QcXG2TrFgSdVdXNlcdDioOzGBmlNFhlu4994qk'
+keyBing = ''
 credentialBing = 'Basic ' + (':%s' % keyBing).encode('base64')[:-1] # the "-1" is to remove the trailing "\n" which encode adds
 
 def searchKeyword (keyword, top, offset):
@@ -154,7 +154,7 @@ firebase = firebase.FirebaseApplication('https://in-the-loop.firebaseio.com', No
 '''
 Initializing indico.io
 '''
-indicoio.config.api_key = '4d5aca20b4ea5a85a667de57c23d2e50'
+indicoio.config.api_key = ''
 
 
 '''

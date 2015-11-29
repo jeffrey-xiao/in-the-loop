@@ -26,7 +26,16 @@ loopApp.config(['$routeProvider', function($routeProvider) {
 function initMap(){
   mapLoaded = true;
 }
-loopApp.controller('HomeController', ['$scope', '$firebaseArray', '$rootScope', function($scope, $firebaseArray, $rootScope) {
+function returnEmoji(mood){
+  if(mood < 0.33){
+    return emojione.toImage(':worried:');
+  }else if(mood < 0.66){
+    return emojione.toImage(':sweat:');
+  }else {
+    return emojione.toImage(':happy:');
+  }
+}
+loopApp.controller('HomeController', ['$scope', '$firebaseArray', '$rootScope', '$sce', function($scope, $firebaseArray, $rootScope, $sce) {
   $(window).scrollTop(0);
   $rootScope.page="Home";
   setTimeout(function(){
@@ -56,6 +65,7 @@ loopApp.controller('HomeController', ['$scope', '$firebaseArray', '$rootScope', 
         $scope.articles[i]['political-sum']['Green']/t*100,
         $scope.articles[i]['political-sum']['Conservative']/t*100
       ];
+      $scope.articles[i].emoji =  $sce.trustAsHtml(returnEmoji($scope.articles[i]['mood-avg']));
       $('<img src="img/uploads/'+$scope.articles[i].image+'" />').load(function(){
         loaded++;
         if(loaded == total){ done(); }

@@ -10,7 +10,7 @@
   <a ng-repeat="article in articles" href="#/article/{{article.$id}}" class="article wow fadeInUp" ng-if="$index > 0" data-wow-duration="450ms">
     <div class="row">
       <div class="col-sm-9">
-        <h2>#{{article.tag}}<div class="inline-chart"><div ng-repeat="value in article.politicalSums" class="inline-chart-bar" style="background:{{colours[$index]}};height:{{value}}%"></div></div><br/><span class="tag">#{{article.header}}</span></h2>
+        <h2>#{{article.tag}}<div class="inline-chart"><div ng-repeat="value in article.politicalSums" class="inline-chart-bar" style="background:{{colours[$index]}};height:{{value}}%"></div></div><span ng-bind-html="article.emoji" class="emoji"></span><br/><span class="tag">#{{article.header}}</span></h2>
         <p>{{article.description.substring(0, 500)}}..</p>
         <p>Read More...</p>
       </div>

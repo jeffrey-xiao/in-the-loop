@@ -1,5 +1,7 @@
 var loopApp = angular.module('loopApp', ["firebase", 'ngRoute', 'chart.js']);
 var stop = false;
+window.mainColours = ["#FF7300","#DE2121","#15CF21","#1966D1"];
+window.mainCats = ['Libertarian', 'Liberal', 'Green', 'Conservative'];
 mapLoaded = false;
 loopApp.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
@@ -30,8 +32,11 @@ loopApp.controller('HomeController', ['$scope', '$firebaseArray', '$rootScope', 
   setTimeout(function(){
     new WOW().init();
   },1);
+  $scope.labels = window.mainCats;
+  $scope.colours = window.mainColours;
   var ref = new Firebase("https://in-the-loop.firebaseio.com/");
   $scope.articles = $firebaseArray(ref);
+  window.scope = $scope;
   $scope.articles.$loaded().then(function(){
     var loaded = 0;
     var complete = false;
@@ -44,6 +49,13 @@ loopApp.controller('HomeController', ['$scope', '$firebaseArray', '$rootScope', 
       }
     }
     for(var i = 0; i < total; i++){
+      t = $scope.articles[i]['political-sum']['Libertarian'] + $scope.articles[i]['political-sum']['Liberal'] + $scope.articles[i]['political-sum']['Green'] + $scope.articles[i]['political-sum']['Conservative'];
+      $scope.articles[i].politicalSums = [
+        $scope.articles[i]['political-sum']['Libertarian']/t*100,
+        $scope.articles[i]['political-sum']['Liberal']/t*100,
+        $scope.articles[i]['political-sum']['Green']/t*100,
+        $scope.articles[i]['political-sum']['Conservative']/t*100
+      ];
       $('<img src="img/uploads/'+$scope.articles[i].image+'" />').load(function(){
         loaded++;
         if(loaded == total){ done(); }
@@ -60,9 +72,9 @@ loopApp.controller('ArticleController', ['$scope', '$firebaseObject', '$routePar
   setTimeout(function(){
     new WOW().init();
   },1);
-  $scope.labels = ['Libertarian', 'Liberal', 'Green', 'Conservative'];
+  $scope.labels = window.mainCats;
   $scope.chart = [0,0,0,0];
-  $scope.chartColours = ["#FF7300","#DE2121","#15CF21","#1966D1"];
+  $scope.chartColours = window.mainColours;
   var locs = [];
   function queueLocs(){
     if(mapLoaded){

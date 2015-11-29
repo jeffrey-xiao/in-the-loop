@@ -32,7 +32,7 @@ function returnEmoji(mood){
   }else if(mood < 0.66){
     return emojione.toImage(':sweat:');
   }else {
-    return emojione.toImage(':happy:');
+    return emojione.toImage(':smile:');
   }
 }
 loopApp.controller('HomeController', ['$scope', '$firebaseArray', '$rootScope', '$sce', function($scope, $firebaseArray, $rootScope, $sce) {

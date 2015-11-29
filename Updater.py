@@ -179,9 +179,9 @@ for location in results:
                 keyword = keyword[1:]
             # process keyword
             print "Results for " + keyword
-            results = searchKeyword(keyword.replace(" ","+"), 2, 0)
-            #if len(results) == 15:
-            #    results += searchKeyword(keyword.replace(" ","+"), 15, 16)
+            results = searchKeyword(keyword.replace(" ","+"), 15, 0)
+            if len(results) == 15:
+                results += searchKeyword(keyword.replace(" ","+"), 15, 16)
             for x in range(len(results)):
                 print results[x]["Url"]
                 article = None

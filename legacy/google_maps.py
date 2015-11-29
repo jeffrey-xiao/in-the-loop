@@ -1,6 +1,6 @@
 import googlemaps
 
-gmaps = googlemaps.Client(key = "AIzaSyCx2OdZxrmvJwek2zGyIojR7auQnbRdQAg")
+gmaps = googlemaps.Client(key = "")
 
 res = gmaps.geocode("Paris")
 print res[0]['geometry']['location']['lat'],res[0]['geometry']['location']['lng']

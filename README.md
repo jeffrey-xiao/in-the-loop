@@ -1,5 +1,7 @@
 # HackWestern Plan
 
+**Note:** The parts of our app are in the other branches of this repo
+
 ## *A live-updated trend-based news-aggregator app*
 ### Reasoning
 Following the recent savage attacks in Paris, the world has seen the chaos that followed during and after the event. Our app aims to provide truthful information aggregated from multiple news sources and is based on Twitter trends. 
